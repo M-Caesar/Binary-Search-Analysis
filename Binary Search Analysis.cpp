@@ -2,6 +2,7 @@
 //
 #include <vector>
 #include <iostream>
+#include <random>
 
 //This is the beggining of the random numbers branch
 int recursiveBinarySearch(const std::vector<int>& arr, int target, int low, int high)
@@ -56,7 +57,15 @@ int iterartiveBinarySearch(const std::vector<int>& arr, int target)
 
 int main()
 {
-    std::vector<int> arr = { 1,2,3,4,5,6,7,8,9,10,11,12 };
+    std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<int> distribution(1, 100);
+
+    for (int i = 0; i < 5; i++)
+    {
+        int random_number = distribution(rng);
+        std::cout << "Random Number: " << random_number << std::endl;
+    }
+    //std::vector<int> arr = { 1,2,3,4,5,6,7,8,9,10,11,12 };
     int target = 6;
 
     int result = recursiveBinarySearch(arr, target, 0, arr.size() - 1);
