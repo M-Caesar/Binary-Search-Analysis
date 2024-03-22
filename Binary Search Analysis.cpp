@@ -57,16 +57,31 @@ int iterartiveBinarySearch(const std::vector<int>& arr, int target)
 
 int main()
 {
+    int random_number;
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<int> distribution(1, 100);
 
     for (int i = 0; i < 5; i++)
     {
-        int random_number = distribution(rng);
+        random_number = distribution(rng);
         std::cout << "Random Number: " << random_number << std::endl;
     }
+
+
     //std::vector<int> arr = { 1,2,3,4,5,6,7,8,9,10,11,12 };
-    int target = 6;
+
+    std::vector<int> arr(100);
+    for (int i = 0; i < arr.size(); i++)
+    {
+        arr[i] = distribution(rng);
+    }
+    for (int i = 0; i < arr.size(); i++)
+    {
+        std::cout << arr[i] << std::endl;
+    }
+
+    int target = distribution(rng);
+    std::cout << "Target is: " << target << std::endl;
 
     int result = recursiveBinarySearch(arr, target, 0, arr.size() - 1);
 
