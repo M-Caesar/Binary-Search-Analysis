@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 
-
+//This is a tes
 int recursiveBinarySearch(const std::vector<int>& arr, int target, int low, int high)
 {
     if (low <= high)
@@ -56,12 +56,12 @@ int iterartiveBinarySearch(const std::vector<int>& arr, int target)
 
 int main()
 {
-    std::vector<int> arr = { 1,2,3,4,5,6,7,8,9,10 };
+    std::vector<int> arr = { 1,2,3,4,5,6,7,8,9,10,11,12 };
     int target = 6;
 
     int result = recursiveBinarySearch(arr, target, 0, arr.size() - 1);
 
-    int result = iterartiveBinarySearch(arr, target);
+    //int result = iterartiveBinarySearch(arr, target);
 
     if (result != -1)
     {
