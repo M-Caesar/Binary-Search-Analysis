@@ -3,13 +3,14 @@
 #include <vector>
 #include <iostream>
 #include <random>
+#include <chrono>
 
 //This is the beggining of the random numbers branch
 int recursiveBinarySearch(const std::vector<int>& arr, int target, int low, int high)
 {
     if (low <= high)
     {
-        int mid = low + (high - low) / 2;
+        int mid = low + ((high - low) / 2);
 
         if (arr[mid] == target)
         {
@@ -26,7 +27,7 @@ int recursiveBinarySearch(const std::vector<int>& arr, int target, int low, int 
     }
     else
     {
-        return -1;
+        return -1; //Target not found
     }
 }
 
@@ -37,7 +38,7 @@ int iterartiveBinarySearch(const std::vector<int>& arr, int target)
 
     while (low <= high)
     {
-        int mid = low + (high - low) / 2;
+        int mid = low + ((high - low) / 2);
 
         if (arr[mid] == target)
         {
@@ -55,46 +56,110 @@ int iterartiveBinarySearch(const std::vector<int>& arr, int target)
     return -1;
 }
 
+int sequentialSearch(const std::vector<int>& arr, int target)
+{
+    for (int i = 0; i < arr.size(); ++i)
+    {
+        if (arr[i] == target)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 int main()
 {
-    int random_number;
+    //declaring variables
+    int n = 1000000;
+    double sumRBS = 0;
+    double sumIBS = 0;
+    double sumSeqS = 0;
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<int> distribution(1, 100);
+    for (int l = 0; l < 10; ++l)
+    {  
+        //random number generation
 
-    for (int i = 0; i < 5; i++)
-    {
-        random_number = distribution(rng);
-        std::cout << "Random Number: " << random_number << std::endl;
+        //Initalization of the vector array
+        int target = distribution(rng);
+        std::vector<int> arr(n);
+        for (int i = 0; i < arr.size(); ++i)
+        {
+            arr[i] = distribution(rng);
+            //arr[i] = i;
+        }
+        for (int i = 0; i < arr.size(); ++i)
+        {
+            //std::cout << arr[i] << std::endl;
+        }
+        std::cout << "Target is: " << target << std::endl;
+
+        //Clocking the recursive Search
+        auto start_time1 = std::chrono::high_resolution_clock::now();
+        int result1 = recursiveBinarySearch(arr, target, 0, arr.size() - 1);
+        auto end_time1 = std::chrono::high_resolution_clock::now();
+        auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(end_time1 - start_time1).count();
+        double countr = (double)duration1; //casting duration to double
+        sumRBS = sumRBS + countr; //adding to sum
+
+        //printing results
+        std::cout << "Binary duration:" << countr << std::endl;
+        if (result1 != -1)
+        {
+            std::cout << "Element found at index: " << result1 << std::endl;
+        }
+        else
+        {
+            std::cout << "Element not found in the array." << std::endl;
+        }
+
+
+        //clocking the iterative Search
+        auto start_time2 = std::chrono::high_resolution_clock::now();
+        int result2 = iterartiveBinarySearch(arr, target);
+        auto end_time2 = std::chrono::high_resolution_clock::now();
+
+        auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end_time2 - start_time2).count();
+        double counti = (double)duration2;
+        sumIBS = sumIBS + counti;
+
+        std::cout << "Iterative duration: " << counti << std::endl;
+
+        if (result2 != -1)
+        {
+            std::cout << "Element found at index: " << result2 << std::endl;
+        }
+        else
+        {
+            std::cout << "Element not found in the array." << std::endl;
+        }
+
+        //clocking the Sequential Search
+        auto start_time3 = std::chrono::high_resolution_clock::now();
+        int result3 = sequentialSearch(arr, target);
+        auto end_time3 = std::chrono::high_resolution_clock::now();
+
+        auto duration3 = std::chrono::duration_cast<std::chrono::microseconds>(end_time3 - start_time3).count();
+        double counts = (double)duration3;
+        sumSeqS = sumSeqS + counts;
+
+        std::cout << "Sequential duration: " << counts << std::endl;
+
+        if (result3 != -1)
+        {
+            std::cout << "Element found at index: " << result3 << std::endl;
+        }
+        else
+        {
+            std::cout << "Element not found in the array." << std::endl;
+        }
+        
     }
-
-
-    //std::vector<int> arr = { 1,2,3,4,5,6,7,8,9,10,11,12 };
-
-    std::vector<int> arr(100);
-    for (int i = 0; i < arr.size(); i++)
-    {
-        arr[i] = distribution(rng);
-    }
-    for (int i = 0; i < arr.size(); i++)
-    {
-        std::cout << arr[i] << std::endl;
-    }
-
-    int target = distribution(rng);
-    std::cout << "Target is: " << target << std::endl;
-
-    int result = recursiveBinarySearch(arr, target, 0, arr.size() - 1);
-
-    //int result = iterartiveBinarySearch(arr, target);
-
-    if (result != -1)
-    {
-        std::cout << "Element found at index: " << result << std::endl;
-    }
-    else
-    {
-        std::cout << "Element not found in the array." << std::endl;
-    }
+    std::cout << "Average Running Time for Recursive Binary Search in microseconds is " << (sumRBS / 10) << std::endl;
+    std::cout << "Average Running Time for Iterative Binary Search in microseconds is " << (sumIBS / 10) << std::endl;
+    std::cout << "Average Running Time for Sequential Search in microseconds is " << (sumSeqS / 10) << std::endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
